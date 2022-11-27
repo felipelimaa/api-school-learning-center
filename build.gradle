@@ -1,0 +1,98 @@
+buildscript {
+	repositories {
+		mavenCentral()
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:${gradleTestSetsVersion}")
+	}
+}
+
+apply plugin: 'jacoco'
+apply plugin: 'groovy'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'org.unbroken-dome.test-sets'
+
+group = 'com.fltech'
+description = 'api-school-learning-center'
+sourceCompatibility = '11'
+
+repositories {
+	mavenCentral()
+}
+
+configurations {
+	all {
+		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+		exclude module: "logback-classic"
+	}
+}
+
+
+dependencies {
+	implementation('org.springframework.boot:spring-boot-starter-actuator') {
+		exclude group: " org.yaml", module: "snakeyaml"
+	}
+	implementation(
+		'org.springframework.boot:spring-boot-starter-web',
+		'org.springframework.boot:spring-boot-starter-webflux',
+		'org.springframework.boot:spring-boot-starter-jdbc',
+		'org.springframework.boot:spring-boot-starter-aop',
+		"org.springframework.security:spring-security-core:${springSecurityCoreVersion}",
+
+		//groovy
+		"org.apache.groovy:groovy-all:${groovyVersion}",
+
+		//http
+		"org.apache.httpcomponents:httpclient:${httpClientVersion}",
+
+		//database
+		"mysql:mysql-connector-java:${mysqlConnectorVersion}",
+		"org.flywaydb:flyway-core:${flywayCoreVersion}",
+
+		//unit tests
+		// "com.twelvemonkeys.imagio:imagio-tiff:${imageIoTiffVersion}",
+		// "org.apache.pdfbox:pdfbox:${pdfBoxVersion}",
+
+		//logging
+		"xerces:xercesImpl:${xercesImplVersion}",
+		"org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}",
+		"org.apache.logging.log4j:log4j-core:${log4jVersion}",
+		"org.apache.logging.log4j:log4j-api:${log4jVersion}",
+		"org.apache.logging.log4j:log4j-jul:${log4jVersion}",
+		"org.apache.logging.log4j:log4j-layout-template-json:${log4jVersion}",
+		'org.springframework.boot:spring-boot-starter-log4j2',
+
+		//tracing
+		"org.apache.commons:commons-lang3:${commonsLang3Version}",
+		"org.yaml:snakeyaml:${yamlVersion}"
+	)
+
+	testImplementation(
+		'org.springframework.boot:spring-boot-starter-test',
+		"org.spockframework:spock-core:${spockCoreVersion}",
+		"org.spockframework:spock-spring:${spockSpringVersion}",
+		'io.projectreactor:reactor-test',
+		"com.github.javafaker:javafaker:${javaFakerVersion}"
+	)
+}
+
+jacocoTestReport {
+	reports {
+		xml.enabled true
+		xml.destination file("${buildDir}/reports/jacoco/report.xml")
+	}
+}
+
+test {
+	useJUnitPlatform()
+}
+
+jar {
+	enabled = false
+}

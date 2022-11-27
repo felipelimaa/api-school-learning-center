@@ -1,0 +1,17 @@
+version: '3'
+services:
+  mysql:
+    platform: linux/x86_64
+    image: mysql:8.0.31
+    environment:
+      - MYSQL_ROOT_PASSWORD=schoolLearningCenterPass
+      - MYSQL_USER=schoolLearningCenterUser
+      - MYSQL_PASSWORD=schoolLearningCenterPass
+      - MYSQL_DATABASE=dbSchoolLearningCenter
+    ports:
+      - "3306:3306"
+    networks:
+      - mysql-network
+networks:
+  mysql-network:
+    driver: bridge

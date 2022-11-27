@@ -1,0 +1,19 @@
+server.port: 8080
+scheduler.jdbc.thread-pool-size: 10
+spring.profiles.active: test
+spring:
+    datasource:
+        school-learning-center:
+            url: "jdbc:mysql://${MYSQL_ENDPOINT:127.0.0.1}/${MYSQL_DATABASE:dbSchoolLearningCenter}?useSSL=true&verifyServerCertificate=false&autoReconnect=true&enabledTLSProtocols=TLSv1.2"
+            username: ${MYSQL_USER:schoolLearningCenterUser}
+            password: ${MYSQL_PASS:schoolLearningCenterPass}
+    jackson.property-naming-strategy: SNAKE_CASE
+    flyway:
+        locations: classpath:db/migration
+        enabled: true
+    servlet:
+        multipart:
+            max-file-size: 30MB
+            max-request-size: 30MB
+
+management.endpoints.web.base-path: /
